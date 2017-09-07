@@ -1,0 +1,40 @@
+{# -*- engine: jinja2 -*- #}
+{% extends "include/base.html" %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <header role="banner">
+	{# Small device #}
+	{#
+	<div class="jumbotron hidden-sm-up" style="padding: 1rem 1rem">
+	</div>
+	#}
+	{# Large device #}
+	{#  hidden-xs-down #}
+	<div class="jumbotron" style="padding: 1rem 1rem">
+	    <h1 class="display-3">
+		<img src="{{ static('image/favicon.png') }}">
+		Alpine Toolkit
+	    </h1>
+	</div>
+    </header>
+
+    {% if user.is_authenticated() %}
+    {% else %}
+	<p>
+	    <a class="btn btn-primary" href="{{ url('account.login') }}" role="button">
+		<i class="fa fa-sign-in"></i> Connexion</a></li>
+	</p>
+    {% endif %}
+
+    <p>
+	<a class="btn btn-primary" href="{{ url('about') }}" role="button">
+	    À propos</a>
+	<a class="btn btn-primary" href="/api-docs" role="button">
+	    REST API Doc</a>
+	<a class="btn btn-primary" href="/api" role="button">
+	    REST API</a>
+    </p>
+{% endblock %}

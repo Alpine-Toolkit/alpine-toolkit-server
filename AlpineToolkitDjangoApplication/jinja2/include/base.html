@@ -1,0 +1,128 @@
+{# -*- engine: jinja2 -*- #}
+<!DOCTYPE html>
+{% set use_cdn = false %}
+<html lang="fr">
+    <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+	<title>Alpine Toolkit Administration{% block title %}{% endblock %}</title>
+	<meta name="description" content="">
+	<meta name="author" content="Fabrice Salvaire">
+
+	{# Stylesheets #}
+	<link rel="shortcut icon" href="{{ static('image/favicon.png') }}">
+	{% if use_cdn %}
+	    {#
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css"
+		  integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+	    #}
+	{% else %}
+	    <link rel="stylesheet" href={{ static('css-ext/font-awesome.min.css') }}>
+	    <link rel="stylesheet" href={{ static('css-ext/bootstrap.min.css') }}>
+	{% endif %}
+	<link rel="stylesheet" href={{ static('css/alpine-toolkit.css') }}>
+
+	{% block head %}{% endblock %}
+    </head>
+
+    {# Body #}
+    {% block body %}
+	<body>
+	    {# Top navbar #}
+	    {% block navbar %}
+		<nav class="navbar navbar-toggleable-md navbar-dark bg-inverse navbar-fixed-top">
+		    <div class="container">
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+				aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+			    <span class="navbar-toggler-icon"></span>
+			</button>
+			<a class="navbar-brand" href="/">Alpine Toolkit</a>
+			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			    <ul class="navbar-nav ml-auto">
+				{% if user.is_authenticated() %}
+				    <li class="nav-item dropdown {% block nav_account %}{% endblock %}">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+					   aria-haspopup="true" aria-expanded="false">
+					    <i class="fa fa-user"></i> {{ user.username }}
+					</a> {#get_full_name()#}
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+					    <a class="dropdown-item" href="{{ url('account.profile') }}"><i class="fa fa-cog"></i>Profile</a>
+					    <div class="dropdown-divider"></div>
+					    <a class="dropdown-item" href="{{ url('account.logout') }}"><i class="fa fa-sign-out"></i>Log out</a>
+					</div>
+				    </li>
+				    <li class="nav-item"><a class="nav-link" href="/admin"><i class="fa fa-wrench"></i></a></li>
+				{% else %}
+				    <li class="nav-item {% block nav_login %}{% endblock %}">
+					<a class="nav-link" href="{{ url('account.login') }}"><i class="fa fa-sign-in"></i>Connexion</a></li>
+				{% endif %}
+			    </ul>
+			</div>
+		    </div>
+		</nav>
+	    {% endblock %}
+
+	    {# Standard page layout #}
+	    {% block body_container %}
+		<div class="body">
+		    <div class="container">
+			{# Breadcrumb #}
+			{% block breadcrumb %}
+			    <div class="row">
+				<div class="col-xl-12">
+				    <ul class="breadcrumb" role="navigation">
+					<li><a href="/"><i class="fa fa-home"></i> Accueil</a></li>
+					{% block breadcrumb_li %}{% endblock %}
+				    </ul>
+				</div>
+			    </div>
+			{% endblock %}
+
+			{# Page content #}
+			<main role="main">
+			    {% include 'include/message.html' %}
+			    <div class="row">
+				<div class="col-xl-12">
+				    {% block content %}{% endblock %}
+				</div>
+			    </div>
+			</main>
+
+			{# Footer #}
+			{% block footer %}
+			    <hr />
+			    <footer role="contentinfo" >
+				<p>
+				    <i class="fa fa-copyright"></i>
+				    <a href="https://github.com/">
+					Alpine Toolkit Web Application 2017</a>
+				    / <a href="/mentions-legales">Mentions légales</a>
+				</p>
+			    </footer>
+			{% endblock %}
+		    </div>
+		</div>
+	    {% endblock %}
+
+	    {# Lazy Scripts #}
+	    {% if use_cdn %}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	    {% else %}
+		<script type="text/javascript" src={{ static('js-ext/jquery.min.js') }}></script>
+	    {% endif %}
+	    <script type="text/javascript" src={{ static('js-ext/tether.min.js') }}></script>
+	    {% if use_cdn %}
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js"
+			integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+	    {% else %}
+		<script type="text/javascript" src={{ static('js-ext/bootstrap.min.js') }}></script>
+	    {% endif %}
+
+	    {# Custom script #}
+	    {% block script %}{% endblock %}
+	</body>
+    {% endblock %}
+</html>
