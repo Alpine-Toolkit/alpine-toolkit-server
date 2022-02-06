@@ -1,2 +1,4 @@
+A Django test app featuring:
 
-.. End
+* account
+* filer
